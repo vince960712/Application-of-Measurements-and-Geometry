@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 11 General Mathematics – Measurement & Geometry Quiz</title>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f7fb;color:#172033}
+  .wrap{max-width:900px;margin:0 auto;padding:24px}
+  .card{background:#fff;border-radius:18px;padding:28px;box-shadow:0 8px 28px rgba(20,40,80,.10)}
+  h1{margin:0 0 8px;font-size:28px}
+  .subtitle{color:#60708a;margin-bottom:20px}
+  .progress{height:10px;background:#e8edf5;border-radius:99px;overflow:hidden;margin:18px 0 24px}
+  .bar{height:100%;width:20%;background:#356ae6;transition:.3s}
+  .problem-title{font-size:22px;margin:0 0 12px}
+  .scenario{line-height:1.65;background:#f7f9fc;padding:16px;border-radius:12px;margin-bottom:20px}
+  .part{border:1px solid #e1e7f0;border-radius:14px;padding:18px;margin:14px 0}
+  .part h3{margin:0 0 12px;font-size:17px}
+  input{width:100%;padding:12px 14px;border:2px solid #d6deeb;border-radius:10px;font-size:17px}
+  input:focus{outline:none;border-color:#356ae6}
+  .hint{font-size:13px;color:#6b778c;margin-top:7px}
+  button{border:0;border-radius:10px;padding:12px 20px;font-size:16px;font-weight:700;cursor:pointer}
+  .submit{background:#356ae6;color:#fff}
+  .next{background:#173b8f;color:#fff;display:none}
+  .restart{background:#edf2fb;color:#173b8f}
+  button:disabled{opacity:.5;cursor:not-allowed}
+  .actions{display:flex;gap:12px;justify-content:flex-end;margin-top:22px;flex-wrap:wrap}
+  .feedback{display:none;margin-top:16px;padding:16px;border-radius:12px}
+  .feedback.correct{display:block;background:#eaf8ef;border:1px solid #a9dfba;color:#155c2a}
+  .feedback.incorrect{display:block;background:#fff0f0;border:1px solid #efb2b2;color:#8b2020}
+  .key{margin-top:8px;font-weight:700}
+  .score{display:none;text-align:center}
+  .score .big{font-size:48px;font-weight:800;color:#356ae6}
+  .review{text-align:left;margin-top:24px}
+  .review-item{padding:12px;border-bottom:1px solid #e5e9f0}
+  .tag{display:inline-block;padding:3px 8px;border-radius:20px;font-size:12px;font-weight:700}
+  .tag.ok{background:#dff5e6;color:#176b32}.tag.no{background:#ffe1e1;color:#8b2020}
+  .teacher-note{font-size:13px;color:#6c7789;margin-top:20px}
+  @media(max-width:600px){.wrap{padding:12px}.card{padding:20px}h1{font-size:23px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <section id="quiz">
+      <h1>Grade 11 General Mathematics</h1>
+      <div class="subtitle">Practical Applications of Measurement & Geometry</div>
+      <div id="counter"></div>
+      <div class="progress"><div class="bar" id="bar"></div></div>
+      <div id="problem"></div>
+    </section>
+
+    <section id="score" class="score">
+      <h1>🎉 Task Completed!</h1>
+      <p>Your final score is:</p>
+      <div class="big" id="finalScore"></div>
+      <p id="percentage"></p>
+      <div class="review" id="review"></div>
+      <div class="actions"><button class="restart" onclick="restartQuiz()">Retake Quiz</button></div>
+    </section>
+  </div>
+</div>
+
+<script>
+const problems = [
+{
+ title:"Problem 1: The Tiling Project",
+ scenario:`A homeowner is renovating a rectangular living room that measures <b>5 m</b> in length and <b>4 m</b> in width. They plan to cover the entire floor with square vinyl tiles. Each tile has a side length of <b>0.5 m</b> and costs <b>₱45.00</b>.`,
+ parts:[
+  {label:"A", question:"How many tiles are required to cover the entire living room floor?", answer:80, unit:"tiles"},
+  {label:"B", question:"What is the total cost of the tiles needed for the project?", answer:3600, unit:"₱"}
+ ]
+},
+{
+ title:"Problem 2: Fencing a Composite Lot",
+ scenario:`A farmer owns a piece of land shaped like a rectangle with a semi-circle attached to one of its shorter sides. The rectangular part is <b>120 m</b> long and <b>40 m</b> wide, with the semi-circle's diameter spanning the entire <b>40 m</b> width. He wants to fence the entire outer perimeter. Wire fencing costs <b>₱150.00 per meter</b>. Use <b>π ≈ 3.14</b>.`,
+ parts:[
+  {label:"A", question:"What is the total length of the perimeter to be fenced?", answer:342.8, unit:"m", tolerance:.01},
+  {label:"B", question:"Calculate the total cost of the fencing materials.", answer:51420, unit:"₱"}
+ ]
+},
+{
+ title:"Problem 3: The Community Water Tank",
+ scenario:`A local barangay has installed a cylindrical water tank to supply water during shortages. The tank has a radius of <b>2 m</b> and a height of <b>5 m</b>. The local water utility charges <b>₱35.00 per cubic meter</b>. Use <b>π ≈ 3.14</b>.`,
+ parts:[
+  {label:"A", question:"What is the maximum volume of water the tank can hold in cubic meters?", answer:62.8, unit:"m³", tolerance:.01},
+  {label:"B", question:"How much will it cost to completely fill the empty tank?", answer:2198, unit:"₱"}
+ ]
+},
+{
+ title:"Problem 4: Excavation Costs",
+ scenario:`A contractor is hired to dig a rectangular foundation for a new commercial building. The foundation must be <b>12 m</b> long, <b>8 m</b> wide, and <b>1.5 m</b> deep. The heavy equipment company charges <b>₱450.00 per cubic meter</b> to excavate and remove the soil.`,
+ parts:[
+  {label:"A", question:"How many cubic meters of soil must be removed?", answer:144, unit:"m³"},
+  {label:"B", question:"What is the total cost of the excavation?", answer:64800, unit:"₱"}
+ ]
+},
+{
+ title:"Problem 5: Packaging Design",
+ scenario:`A manufacturing company is designing a closed rectangular cardboard box. The dimensions are <b>20 cm</b> long, <b>15 cm</b> wide, and <b>10 cm</b> high. The specialized cardboard material costs <b>₱0.05 per square centimeter</b>.`,
+ parts:[
+  {label:"A", question:"What is the total surface area of one closed box?", answer:1300, unit:"cm²"},
+  {label:"B", question:"What is the cost of the cardboard material required to produce a single box?", answer:65, unit:"₱"}
+ ]
+}
+];
+
+let current=0, score=0, results=[];
+
+function money(n){
+  return "₱" + Number(n).toLocaleString("en-PH",{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+function fmt(ans, unit){
+  if(unit==="₱") return money(ans);
+  return Number(ans).toLocaleString("en-US") + (unit ? " " + unit : "");
+}
+function cleanNumber(value){
+  return Number(String(value).replace(/,/g,"").replace(/₱/g,"").trim());
+}
+function isCorrect(input, p){
+  const n=cleanNumber(input);
+  if(!Number.isFinite(n)) return false;
+  const tol=p.tolerance ?? Math.max(Math.abs(p.answer)*0.001,0.001);
+  return Math.abs(n-p.answer)<=tol;
+}
+
+function render(){
+  const p=problems[current];
+  document.getElementById("counter").textContent=`Problem ${current+1} of ${problems.length}`;
+  document.getElementById("bar").style.width=((current+1)/problems.length*100)+"%";
+  let parts=p.parts.map((x,i)=>`
+    <div class="part">
+      <h3>${x.label}. ${x.question}</h3>
+      <input id="ans${i}" inputmode="decimal" autocomplete="off" placeholder="Enter your numerical answer">
+      <div class="hint">Enter numbers only. Commas and ₱ are optional.</div>
+      <div id="fb${i}" class="feedback"></div>
+    </div>`).join("");
+  document.getElementById("problem").innerHTML=`
+    <h2 class="problem-title">${p.title}</h2>
+    <div class="scenario">${p.scenario}</div>
+    ${parts}
+    <div class="actions">
+      <button class="submit" id="submitBtn" onclick="submitProblem()">SUBMIT ANSWER</button>
+      <button class="next" id="nextBtn" onclick="nextProblem()">NEXT PROBLEM →</button>
+    </div>
+    <div class="teacher-note">You must submit your answer before proceeding to the next problem.</div>`;
+}
+
+function submitProblem(){
+  let allAnswered=true, allCorrect=true;
+  const p=problems[current];
+  p.parts.forEach((x,i)=>{
+    const input=document.getElementById("ans"+i);
+    const fb=document.getElementById("fb"+i);
+    const value=input.value.trim();
+    if(value===""){ allAnswered=false; return; }
+    const correct=isCorrect(value,x);
+    if(correct) score++; else allCorrect=false;
+    fb.className="feedback "+(correct?"correct":"incorrect");
+    fb.innerHTML=correct
+      ? `<b>✓ Correct!</b><div class="key">Answer: ${fmt(x.answer,x.unit)}</div>`
+      : `<b>✗ Incorrect.</b><div class="key">Correct answer: ${fmt(x.answer,x.unit)}</div>`;
+    input.disabled=true;
+    results.push({problem:current+1,part:x.label,correct});
+  });
+  if(!allAnswered){
+    alert("Please answer all parts before submitting.");
+    return;
+  }
+  document.getElementById("submitBtn").disabled=true;
+  document.getElementById("nextBtn").style.display="inline-block";
+}
+
+function nextProblem(){
+  if(current<problems.length-1){ current++; render(); }
+  else showScore();
+}
+
+function showScore(){
+  document.getElementById("quiz").style.display="none";
+  document.getElementById("score").style.display="block";
+  const total=problems.reduce((s,p)=>s+p.parts.length,0);
+  document.getElementById("finalScore").textContent=`${score} / ${total}`;
+  document.getElementById("percentage").textContent=`${Math.round(score/total*100)}%`;
+  document.getElementById("review").innerHTML=`<h3>Answer Review</h3>`+
+    results.map(r=>`<div class="review-item">Problem ${r.problem} – Part ${r.part}
+      <span class="tag ${r.correct?"ok":"no"}">${r.correct?"CORRECT":"INCORRECT"}</span></div>`).join("");
+}
+function restartQuiz(){
+  current=0;score=0;results=[];
+  document.getElementById("score").style.display="none";
+  document.getElementById("quiz").style.display="block";
+  render();
+}
+render();
+</script>
+</body>
+</html>
